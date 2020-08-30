@@ -6,9 +6,9 @@ import soundfile as sf
 import logging
 import uuid
 import datetime
+from config import API_KEY, SECRET_KEY
 
-API_KEY = 'ZU4KjCJojHDcIc93vuFeobqyh35t0F1jP8KTDTbhkwo=TestCandidate'
-SECRET_KEY = "L1+iWOCHtxbLftTsAf1jyfKFm1bYwE86i3cT/t+IczE="
+
 client = ClientSTT(API_KEY, SECRET_KEY)
 audio_config = {
     "encoding": "LINEAR16",
