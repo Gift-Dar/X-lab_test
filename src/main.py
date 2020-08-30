@@ -87,7 +87,7 @@ def write_database(date, time, message, result, phone_number, file_length):
 
 
 @click.command()
-@click.option('-p', '--path-file', default=os.getcwd(), help='path to file')
+@click.option('-p', '--path-file', default=False, help='path to file')
 @click.option(
     '-p', '--phone-number',
     default=88000000000,
@@ -109,22 +109,25 @@ def write_database(date, time, message, result, phone_number, file_length):
     help='Recognition stage.'
 )
 def main(path_file, phone_number, save, stage):
-    response = client.recognize(path_file, audio_config)
-    message = response[0]['alternatives'][0]['transcript']
-    if stage == 1:
-        answer = conversation_handler_1(message)
-        if answer:
-            result = 'человек'
+    if path_file:
+        response = client.recognize(path_file, audio_config)
+        message = response[0]['alternatives'][0]['transcript']
+        if stage == 1:
+            answer = conversation_handler_1(message)
+            if answer:
+                result = 'человек'
+            else:
+                result = "автоответчик"
         else:
-            result = "автоответчик"
+            answer = conversation_handler_2(message)
+            if answer:
+                result = 'положительно'
+            else:
+                result = 'отрицательно'
+        logging_file(path_file, message, result, phone_number, save)
+        os.remove(path_file)
     else:
-        answer = conversation_handler_2(message)
-        if answer:
-            result = 'положительно'
-        else:
-            result = 'отрицательно'
-    logging_file(path_file, message, result, phone_number, save)
-    os.remove(path_file)
+        print('Введите путь до файла')
 
 
 if __name__ == "__main__":
