@@ -1,0 +1,7 @@
+f"""SELECT *
+  FROM calls, Project, Server
+    JOIN Project ON project.id = calls.project_id
+    JOIN Server ON Server.id = calls.server_id
+      WHERE calls.date >= {start_date} AND calls.date <= {final_date}
+      GROUP BY calls.date
+"""
